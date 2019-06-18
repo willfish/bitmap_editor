@@ -31,8 +31,8 @@ class BitmapEditor
         colour_vertical_segment($1, $2, $3, $4)
       when /^H (\d+) (\d+) (\d+) ([A-Z])$/
         colour_horizontal_segment($1, $2, $3, $4)
-      when 'S'
-        puts "There is no image"
+      when "S"
+        show
       else
         puts 'unrecognised command :('
       end
@@ -133,6 +133,14 @@ class BitmapEditor
       end
     else
       puts "image matrix not initialized"
+    end
+  end
+
+  def show
+    if @matrix
+      Commands::Show.new(@matrix).run
+    else
+      puts "There is no image"
     end
   end
 
