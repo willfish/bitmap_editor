@@ -27,6 +27,8 @@ class BitmapEditor
         clear_matrix
       when /^L (\d+) (\d+) ([A-Z])$/
         colour_pixel($1, $2, $3)
+      when /^V (\d+) (\d+) (\d+) ([A-Z])$/
+        colour_vertical_segment($1, $2, $3, $4)
       when 'S'
         puts "There is no image"
       else
@@ -68,6 +70,35 @@ class BitmapEditor
         column_index = Integer(column_index) - BITMAP_TO_ARRAY_OFFSET
 
         Commands::Colour.new(@matrix).run(row_index, column_index, colour)
+      end
+    else
+      puts "image matrix not initialized"
+    end
+  end
+
+  def colour_vertical_segment(column_index, row_start_index, row_end_index, colour)
+    column_index = Integer(column_index)
+    row_start_index = Integer(row_start_index)
+    row_end_index = Integer(row_end_index)
+
+    if @matrix
+      out_of_bounds =
+        out_of_bounds?(row_start_index, column_index) ||
+        out_of_bounds?(row_end_index, column_index)
+
+      if out_of_bounds
+        puts "can't colour elements which are out of bounds"
+      else
+        column_index = column_index - BITMAP_TO_ARRAY_OFFSET
+        row_start_index = row_start_index - BITMAP_TO_ARRAY_OFFSET
+        row_end_index = row_end_index - BITMAP_TO_ARRAY_OFFSET
+
+        Commands::VerticalSegment.new(@matrix).run(
+          column_index,
+          row_start_index,
+          row_end_index,
+          colour,
+        )
       end
     else
       puts "image matrix not initialized"
