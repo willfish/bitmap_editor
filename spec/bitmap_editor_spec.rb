@@ -150,5 +150,31 @@ RSpec.describe BitmapEditor do
         end
       end
     end
+
+    context "when the file contains H X1 X2 Y C" do
+      context "when the image has not yet been initialised" do
+        let(:file) { fixture_path("command_horizontal_segment.txt") }
+
+        it "returns a message to the user" do
+          expect { bitmap_editor.run(file) }.
+            to output("image matrix not initialized\n").to_stdout
+        end
+      end
+
+      context "when a matrix exists to colour vertically" do
+        let(:file) { fixture_path("commands_initialize_and_colour_horizontally.txt") }
+        let(:command) { double.as_null_object }
+
+        it "generates a VerticalSegment command" do
+          allow(Commands::HorizontalSegment).
+            to receive(:new).with(an_instance_of(Matrix)).and_return(command)
+
+          bitmap_editor.run(file)
+
+          expect(command).to have_received(:run)
+        end
+      end
+    end
+
   end
 end
