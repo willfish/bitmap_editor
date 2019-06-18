@@ -30,5 +30,30 @@ RSpec.describe BitmapEditor do
           to output("unrecognised command :(\n").to_stdout
       end
     end
+
+    context "when the file contains I N M" do
+      context "when N or M exceed 250" do
+        let(:file) { fixture_path("command_initialize_exceeds_maximum.txt") }
+
+        it "returns a message to the user" do
+          expect { bitmap_editor.run(file) }.
+            to output("Initializing image too large\n").to_stdout
+        end
+      end
+
+      context "when N or M do not exceed 250" do
+        let(:file) { fixture_path("command_initialize.txt") }
+        let(:command) { double.as_null_object }
+
+        it "generates an Initialize command" do
+          allow(Commands::Initialize).
+            to receive(:new).and_return(command)
+
+          bitmap_editor.run(file)
+
+          expect(command).to have_received(:run)
+        end
+      end
+    end
   end
 end
