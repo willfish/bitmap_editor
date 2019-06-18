@@ -55,5 +55,31 @@ RSpec.describe BitmapEditor do
         end
       end
     end
+
+    context "when the file contains C" do
+      context "when a matrix does not exist to clear" do
+        let(:file) { fixture_path("command_clear.txt") }
+
+        it "returns a message to the user" do
+          expect { bitmap_editor.run(file) }.
+            to output("image matrix not initialized\n").to_stdout
+        end
+      end
+
+      context "when a matrix exists to clear" do
+        let(:file) { fixture_path("commands_initialize_and_clear.txt") }
+        let(:command) { double.as_null_object }
+
+        it "generates a Clear command" do
+          allow(Commands::Clear).
+            to receive(:new).and_return(command)
+
+          bitmap_editor.run(file)
+
+          expect(command).to have_received(:run)
+        end
+      end
+    end
+
   end
 end

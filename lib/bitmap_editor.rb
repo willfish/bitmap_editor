@@ -23,6 +23,8 @@ class BitmapEditor
       case line
       when /^I (\d+) (\d+)$/
         initialize_matrix($1, $2)
+      when "C"
+        clear_matrix
       when 'S'
         puts "There is no image"
       else
@@ -41,6 +43,14 @@ class BitmapEditor
       puts "Initializing image too large"
     else
       @matrix = Commands::Initialize.new(row_count, column_count).run
+    end
+  end
+
+  def clear_matrix
+    if @matrix
+      @matrix = Commands::Clear.new(@matrix).run
+    else
+      puts "image matrix not initialized"
     end
   end
 
