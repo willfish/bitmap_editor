@@ -81,5 +81,49 @@ RSpec.describe BitmapEditor do
       end
     end
 
+    context "when the file contains L X Y C" do
+      context "when the input colour is lower case" do
+        let(:file) { fixture_path("command_colour_lower_case_colour.txt") }
+
+        it "returns a message to the user" do
+          expect { bitmap_editor.run(file) }.
+            to output("unrecognised command :(\n").to_stdout
+        end
+      end
+
+      context "when a matrix does not exist to colour" do
+        let(:file) { fixture_path("command_colour.txt") }
+
+        it "returns a message to the user" do
+          expect { bitmap_editor.run(file) }.
+            to output("image matrix not initialized\n").to_stdout
+        end
+      end
+
+      context "when a matrix exists to colour" do
+        let(:file) { fixture_path("commands_initialize_and_colour.txt") }
+        let(:command) { double.as_null_object }
+
+        it "generates a Colour command" do
+          allow(Commands::Colour).
+            to receive(:new).with(an_instance_of(Matrix)).and_return(command)
+
+          bitmap_editor.run(file)
+
+          expect(command).to have_received(:run)
+        end
+      end
+
+      context "when the element we're colouring is out of bounds" do
+        let(:file) do
+          fixture_path("commands_initialize_and_colour_out_of_bounds.txt")
+        end
+
+        it "returns a message to the user" do
+          expect { bitmap_editor.run(file) }.
+            to output("can't colour elements which are out of bounds\n").to_stdout
+        end
+      end
+    end
   end
 end

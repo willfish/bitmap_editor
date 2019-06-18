@@ -25,6 +25,8 @@ class BitmapEditor
         initialize_matrix($1, $2)
       when "C"
         clear_matrix
+      when /^L (\d+) (\d+) ([A-Z])$/
+        colour_pixel($1, $2, $3)
       when 'S'
         puts "There is no image"
       else
@@ -54,9 +56,48 @@ class BitmapEditor
     end
   end
 
+  def colour_pixel(row_index, column_index, colour)
+    if @matrix
+      row_index = Integer(row_index)
+      column_index = Integer(column_index)
+
+      if out_of_bounds?(row_index, column_index)
+        puts "can't colour elements which are out of bounds"
+      else
+        row_index = Integer(row_index) - BITMAP_TO_ARRAY_OFFSET
+        column_index = Integer(column_index) - BITMAP_TO_ARRAY_OFFSET
+
+        Commands::Colour.new(@matrix).run(row_index, column_index, colour)
+      end
+    else
+      puts "image matrix not initialized"
+    end
+  end
+
   def valid_matrice?(column_count, row_count)
     [column_count, row_count].any? do |count|
       count > MAX_BITMAP_COLUMN_AND_ROW_SIZE
     end
+  end
+
+  def out_of_bounds?(row_index, column_index)
+    row_count = @matrix.row_count
+    column_count = @matrix.column_count
+
+    row_index > row_count ||
+      column_index > column_count ||
+      row_index < MIN_BITMAP_COLUMN_AND_ROW_SIZE ||
+      column_index < MIN_BITMAP_COLUMN_AND_ROW_SIZE
+  end
+end
+
+class Matrix
+  # Having to Monkey patch the matrix class as it doesn't
+  # provide public interface for setting the value of specific column values
+  # in specific rows.
+  #
+  # https://github.com/ruby/ruby/blob/ruby_2_3/lib/matrix.rb#L379-L384
+  def []=(i, j, v)
+    @rows[i][j] = v
   end
 end
