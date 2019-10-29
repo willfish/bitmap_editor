@@ -30,6 +30,8 @@ class BitmapEditor
         colour_vertical_segment($1, $2, $3, $4)
       when /^H (\d+) (\d+) (\d+) ([A-Z])$/
         colour_horizontal_segment($1, $2, $3, $4)
+      when /^U (\d+) (\d+) ([A-Z])$/
+        surround_pixel($1, $2, $3)
       when "S"
         show
       else
@@ -132,6 +134,24 @@ class BitmapEditor
       end
     else
       puts "image bitmap not initialized"
+    end
+  end
+
+  def surround_pixel(row_index, column_index, colour)
+    row_index = Integer(row_index)
+    column_index = Integer(column_index)
+
+    if @bitmap
+      if out_of_bounds?(row_index, column_index)
+        puts "can't colour elements which are out of bounds"
+      else
+        row_index = Integer(row_index) - BITMAP_TO_ARRAY_OFFSET
+        column_index = Integer(column_index) - BITMAP_TO_ARRAY_OFFSET
+
+        Commands::SurroundPixel.new(@bitmap).run(row_index, column_index, colour)
+      end
+    else
+      puts "There is no image"
     end
   end
 

@@ -176,6 +176,31 @@ RSpec.describe BitmapEditor do
       end
     end
 
+    context "when the file contains U X Y C" do
+      context "when the bitmap has not yet been initialised" do
+        let(:file) { fixture_path("command_surround_pixel.txt") }
+
+        it "returns a message to the user" do
+          expect { bitmap_editor.run(file) }.
+            to output("There is no image\n").to_stdout
+        end
+      end
+
+      context "when the bitmap has been initialized" do
+        let(:file) { fixture_path("commands_initialize_and_surround_pixel.txt") }
+        let(:command) { double.as_null_object }
+
+        it "generates a Show command" do
+          allow(Commands::SurroundPixel).
+            to receive(:new).and_return(command)
+
+          bitmap_editor.run(file)
+
+          expect(command).to have_received(:run)
+        end
+      end
+    end
+
     context "when the file contains S" do
       context "when the bitmap has not yet been initialised" do
         let(:file) { fixture_path("command_show.txt") }
