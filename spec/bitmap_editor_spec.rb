@@ -142,7 +142,7 @@ RSpec.describe BitmapEditor do
 
         it "generates a VerticalSegment command" do
           allow(Commands::VerticalSegment).
-            to receive(:new).with(an_instance_of(Array).and_return(command)
+            to receive(:new).with(an_instance_of(Array)).and_return(command)
 
           bitmap_editor.run(file)
 
