@@ -1,5 +1,3 @@
-require "pry"
-
 module Commands
   class Show
     def initialize(bitmap)
