@@ -6,8 +6,8 @@ module Commands
     end
 
     def run
-      row_count = @bitmap.row_count
-      column_count = @bitmap.column_count
+      row_count = @bitmap.size
+      column_count = @bitmap.first.size
 
       Initialize.new(row_count, column_count).run
     end
