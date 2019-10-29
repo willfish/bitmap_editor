@@ -1,13 +1,13 @@
 module Commands
-  # Colours a specific pixel in a matrix
+  # Colours a specific pixel in a bitmap
   class Colour
-    def initialize(matrix)
-      @matrix = matrix
+    def initialize(bitmap)
+      @bitmap = bitmap
     end
 
     def run(row_index, column_index, colour)
-      @matrix[row_index, column_index] = colour
-      @matrix
+      @bitmap[row_index][column_index] = colour
+      @bitmap
     end
   end
 end

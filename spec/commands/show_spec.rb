@@ -1,15 +1,19 @@
 require "spec_helper"
 
 RSpec.describe Commands::Show do
-  subject(:command) { described_class.new(matrix) }
+  subject(:command) { described_class.new(bitmap) }
 
-  let(:matrix) { Matrix.build(row_count, column_count) { "O" } }
+  let(:bitmap) do
+    Array.new(row_count) do
+      Array.new(column_count) { "O" }
+    end
+  end
 
   let(:column_count) { 3 }
   let(:row_count) { 2 }
 
   describe "#run" do
-    it "outputs the correct matrix" do
+    it "outputs the correct bitmap" do
       expected = <<~EXPECTED
         OOO
         OOO

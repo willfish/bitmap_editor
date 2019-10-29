@@ -1,5 +1,5 @@
 module Commands
-  # Initializes a new matrix with the default colour
+  # Initializes a new bitmap with the default colour
   class Initialize
     DEFAULT_COLOUR = "O".freeze
 
@@ -9,7 +9,9 @@ module Commands
     end
 
     def run
-      Matrix.build(@row_count, @column_count) { DEFAULT_COLOUR }
+      Array.new(@row_count) do
+        Array.new(@column_count) { DEFAULT_COLOUR }
+      end
     end
   end
 end

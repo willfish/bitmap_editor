@@ -1,11 +1,13 @@
+require "pry"
+
 module Commands
   class Show
-    def initialize(matrix)
-      @matrix = matrix
+    def initialize(bitmap)
+      @bitmap = bitmap
     end
 
     def run
-      output = @matrix.to_a.map do |row|
+      output = @bitmap.map do |row|
         row.join("")
       end.join("\n")
 

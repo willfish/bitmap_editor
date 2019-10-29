@@ -1,9 +1,14 @@
 require "spec_helper"
 
 RSpec.describe Commands::VerticalSegment do
-  subject(:command) { described_class.new(matrix) }
+  subject(:command) { described_class.new(bitmap) }
 
-  let(:matrix) { Matrix.build(row_count, column_count) { "O" } }
+  let(:bitmap) do
+    Array.new(row_count) do
+      Array.new(column_count) { "O" }
+    end
+  end
+
   let(:row_count) { 5 }
   let(:column_count) { 5 }
 

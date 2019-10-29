@@ -7,7 +7,7 @@ RSpec.describe Commands::Initialize do
   let(:column_size) { 2 }
 
   describe "#run" do
-    it "returns a Matrix populated with the correct values" do
+    it "returns a Bitmap populated with the correct values" do
       expected = [
         ["O", "O"],
         ["O", "O"],
