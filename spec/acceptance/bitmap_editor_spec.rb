@@ -11,8 +11,8 @@ RSpec.describe BitmapEditor do
       OOZZZ
       OWOOO
       OWOOO
-      OWOOO
-      OWOOO
+      OWOSS
+      OWOSO
     EXPECTED
 
     expect { bitmap_editor.run(file) }.to output(expected).to_stdout
